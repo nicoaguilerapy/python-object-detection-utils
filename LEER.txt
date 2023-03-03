@@ -1,0 +1,14 @@
+1. En "trainer_images" tirar todas las fotos de placas vehiculares.
+2. En main.py linea 19, la variable COUNT, tiene el numero que debe usar para numerar los
+resultados. El valor inicial es 411, la cual es el siguiente de la carpeta de entrenamiento.
+Si se ejecuta varias veces el script, corregir el valor de count para que continue la secuenta.
+3. En la carpeta result se van a guardar los resultados, el CarsXXX.png y el CarsXXX.xml
+
+ejecutar desde python directo, ir a la carpeta y ejecutar:
+
+pip install pynput
+pip install numpy
+pip install opencv-python
+
+>>> cd folder/trainer/
+>>> py main.py 
