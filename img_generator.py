@@ -6,11 +6,12 @@ video = '2.mp4'
 
 frames = []
 PATH = "training_images"
-i = 0
+
 
 #recorre a video frame a frame con las funciones de opencv y las flechas de numpy
 def detectCars(filename):
     vc = cv2.VideoCapture(filename)
+    i = 13
     #proceso de cargar la lista de frames
     if vc.isOpened():
         rval, frame = vc.read()
