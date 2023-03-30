@@ -26,4 +26,4 @@ class DATAtoXML():
         return "{}, {}, {}".format(self.filename,self.width, self.height)
 
     def save(self, count):
-        tree.write('result/Cars{}.xml'.format(count))
+        tree.write('result2/Cars{}.xml'.format(count))

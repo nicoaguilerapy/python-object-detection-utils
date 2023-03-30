@@ -5,6 +5,12 @@ from win32api import GetSystemMetrics
 import os
 import imgtoxml as ix
 
+#INSTRUCCIONES
+# 1. Cambiar el COUNT a la cantidad de imagenes que ya se tienen en el directorio
+# 2. Primeros 2 click del mouse son para recortar la imagen (OBLIGATORIO)
+# 3. Siguientes 2 click son para marcar la placa (OBLIGATORIO)
+# 4. Presionar cualquier tecla para continuar (menos Q en miniscula, que es para salir)
+
 posList = []
 def onMouse(event, x, y, flags, param):
    global posList
@@ -16,7 +22,7 @@ def onMouse(event, x, y, flags, param):
             keyboard.press(key)
             keyboard.release(key)
 
-COUNT = 0
+COUNT = 279 #contador inicial en CarsX.png y CarsX.xml
 PATH = "training_images"
 files = os.listdir(PATH)
 
@@ -41,32 +47,38 @@ for file in files:
     else:
         new_img = img.copy()
     
-    new_imgOri = new_img.copy()
 
     winname = PATH
     #centro de la imgen en el centro de la pantalla
     screenX = int(GetSystemMetrics(0)/2)-int(width/2)
     screenY = int(GetSystemMetrics(1)/2)-int(height/2)
-    cv2.namedWindow(winname) 
+    cv2.namedWindow(PATH) 
     cv2.moveWindow(winname, screenX, screenY) 
     cv2.imshow(winname, new_img)
-
     cv2.setMouseCallback(PATH, onMouse)
     cv2.waitKey(0)
     cv2.destroyWindow(PATH)
-
+    #recortar la imagen en 2 puntos
+    x, y = posList[0]
+    width, height = posList[1]
+    new_imgori_cut = new_img[y:height, x:width]
+    posList.clear()
+    
+    #mostrar la imagen recortada
+    cv2.namedWindow(PATH) 
+    cv2.moveWindow(winname, screenX, screenY) 
+    cv2.imshow(winname, new_imgori_cut)
+    cv2.setMouseCallback(PATH, onMouse)
+    cv2.waitKey(0)
+    cv2.destroyWindow(PATH)
+    
+    #mostrar la imagen recortada con el rectangulo de la placa
     color = (255, 0, 0)
-    rec = cv2.rectangle(new_img.copy(), posList[0], posList[1], color, 2)
+    rec = cv2.rectangle(new_imgori_cut.copy(), posList[0], posList[1], color, 2)
     cv2.namedWindow(winname) 
     cv2.moveWindow(winname, screenX, screenY) 
     cv2.imshow(winname, rec)
     cv2.waitKey(0)
-
-    #inicio y fin del corte
-    x, y = posList[0]
-    width, height = posList[1]
-    crop_img = img[y:height, x:width]
-    print(y,height, x,width)
 
     #Se crea el archivo xml
     xml_file = ix.DATAtoXML()
@@ -80,6 +92,6 @@ for file in files:
     xml_file.setXML()
     xml_file.save(COUNT)
     
-    cv2.imwrite("result/Cars{}.png".format(COUNT), new_imgOri)
+    cv2.imwrite("result/Cars{}.png".format(COUNT), new_imgori_cut)
     COUNT = COUNT + 1
     posList.clear()

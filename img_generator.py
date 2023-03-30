@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 
 # path del video
-video = '2.mp4'
+video = 'carv.mp4'
 
 frames = []
 PATH = "training_images"
